@@ -1,6 +1,5 @@
 name: Automated Security Scan (Bandit)
 
-# Trigger the workflow on any push or pull request to the main branch
 on:
   push:
     branches: [ "main" ]
@@ -13,32 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Step 1: Checkout the code from the repository
+    # Updated to v4
     - name: Checkout Code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
-    # Step 2: Set up the Python environment
+    # Updated to v5
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: '3.10'
 
-    # Step 3: Install dependencies (Flask and Bandit)
     - name: Install Dependencies
       run: |
         python -m pip install --upgrade pip
         pip install Flask bandit
 
-    # Step 4: Run Bandit Security Scan
-    # Notice we use '|| true' so the pipeline doesn't crash if vulnerabilities are found. 
-    # We just want to generate the report.
     - name: Run Bandit Scan
       run: |
         bandit -r app.py -f txt -o bandit_report_cicd.txt || true
 
-    # Step 5: Archive the report as a downloadable artifact
+    # Updated to v4 (This fixes your error!)
     - name: Upload Vulnerability Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Bandit-Security-Report
         path: bandit_report_cicd.txt
